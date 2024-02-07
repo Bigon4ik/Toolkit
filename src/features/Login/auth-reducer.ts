@@ -1,57 +1,49 @@
-import { Dispatch } from "redux";
-import {
-  SetAppErrorActionType,
-  setAppIsInitializedAC,
-  SetAppIsInitializedActionType,
-  setAppStatusAC,
-  SetAppStatusActionType,
-} from "../../app/app-reducer";
-import { authAPI } from "../../api/todolists-api";
-import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+
+import { authAPI } from "api/todolists-api";
+import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 import { LoginDataType } from "./Login";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "app/store";
+import { appActions } from "app/app-reducer";
 
-const initialState = {
-  isLoggedIn: false,
-};
-type InitialStateType = typeof initialState;
-
-export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-  switch (action.type) {
-    case "login/SET-IS-LOGGED-IN":
-      return { ...state, isLoggedIn: action.value };
-    default:
-      return state;
+const slice = createSlice({
+  name: "auth",
+  initialState: {
+    isLoggedIn: false
+  },
+  reducers: {
+    setIsLoggedIn: (state,action:PayloadAction<{isLoggedIn:boolean}>) => {
+      state.isLoggedIn = action.payload.isLoggedIn
+    }
   }
-};
-// actions
-export const setIsLoggedInAC = (value: boolean) => ({ type: "login/SET-IS-LOGGED-IN", value }) as const;
+});
 
 // thunks
-export const authMeTC = () => async (dispatch: Dispatch<ActionsType>) => {
-  dispatch(setAppStatusAC("loading"));
+export const authMeTC = ():AppThunk => async (dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.authMe();
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(true));
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(authActions.setIsLoggedIn({ isLoggedIn:true }));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);
     }
   } catch (e) {
     handleServerNetworkError(e as { message: string }, dispatch);
   } finally {
-    dispatch(setAppIsInitializedAC(true));
+    dispatch(appActions.setAppIsInitialized({ isInitialized:true }));
   }
 };
-export const loginTC = (loginData: LoginDataType) => async (dispatch: Dispatch<ActionsType>) => {
-  dispatch(setAppStatusAC("loading"));
+export const loginTC = (loginData: LoginDataType):AppThunk => async (dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.login(loginData);
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(true));
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(authActions.setIsLoggedIn({ isLoggedIn:true }));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);
     }
@@ -59,13 +51,13 @@ export const loginTC = (loginData: LoginDataType) => async (dispatch: Dispatch<A
     handleServerNetworkError(e as { message: string }, dispatch);
   }
 };
-export const logOutTC = () => async (dispatch: Dispatch<ActionsType>) => {
-  dispatch(setAppStatusAC("loading"));
+export const logOutTC = ():AppThunk => async (dispatch) => {
+  dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.logOut();
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(false));
-      dispatch(setAppStatusAC("succeeded"));
+      dispatch(authActions.setIsLoggedIn({ isLoggedIn:false }));
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
     } else {
       handleServerAppError(res.data, dispatch);
     }
@@ -74,9 +66,5 @@ export const logOutTC = () => async (dispatch: Dispatch<ActionsType>) => {
   }
 };
 
-// types
-type ActionsType =
-  | ReturnType<typeof setIsLoggedInAC>
-  | SetAppStatusActionType
-  | SetAppErrorActionType
-  | SetAppIsInitializedActionType;
+export const authReducer = slice.reducer
+export const authActions = slice.actions

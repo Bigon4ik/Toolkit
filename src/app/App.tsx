@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { TodolistsList } from "features/TodolistsList/TodolistsList";
-import { useAppDispatch, useAppSelector } from "./store";
+import { AppRootStateType } from "./store";
 import { RequestStatusType } from "./app-reducer";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,12 +16,13 @@ import { Login } from "features/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { authMeTC, logOutTC } from "features/Login/auth-reducer";
 import { CircularProgress } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
-  const dispatch = useAppDispatch();
-  const status = useAppSelector<RequestStatusType>((state) => state.app.status);
-  const isInitialized = useAppSelector((state) => state.app.isInitialized);
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch<any>();
+  const status = useSelector<AppRootStateType,any>((state) => state.app.status);
+  const isInitialized = useSelector<AppRootStateType,boolean>((state) => state.app.isInitialized);
+  const isLoggedIn = useSelector<AppRootStateType,boolean>((state) => state.auth.isLoggedIn);
 
   const logOut = () => {
     dispatch(logOutTC());
