@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Menu } from "@mui/icons-material";
-import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
+import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "features/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { authMeTC, logOutTC } from "features/Login/auth-reducer";

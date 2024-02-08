@@ -1,4 +1,4 @@
-import { todolistsAPI, TodolistType } from "api/todolists-api";
+import { todolistsAPI, TodolistType } from "common/api/todolists-api";
 import { Dispatch } from "redux";
 import { appActions, RequestStatusType } from "app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";

@@ -1,12 +1,13 @@
 
-import { authAPI } from "api/todolists-api";
-import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
+import { authAPI } from "common/api/todolists-api";
+import { handleServerNetworkError } from "common/utils/handleServerNetworkError";
 import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 import { LoginDataType } from "./Login";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
+import { handleServerAppError } from "common/utils/handleServerAppError";
 
 const slice = createSlice({
   name: "auth",

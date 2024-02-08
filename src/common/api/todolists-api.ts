@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { LoginDataType } from "../features/Login/Login";
+import { LoginDataType } from "features/Login/Login";
+import { UpdateDomainTaskModelType } from "features/TodolistsList/tasks-reducer";
 
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1/",
@@ -56,7 +57,7 @@ export const todolistsAPI = {
       { title: string }
     >(`todo-lists/${todolistId}/tasks`, { title });
   },
-  updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+  updateTask( taskId: string, model: UpdateTaskModelType,todolistId: string,) {
     return instance.put<
       ResponseType<{ item: TaskType }>,
       AxiosResponse<ResponseType<{ item: TaskType }>>,
@@ -66,6 +67,11 @@ export const todolistsAPI = {
 };
 
 // types
+export type ArgUpdateTask = {
+  taskId: string,
+  domainModel: UpdateDomainTaskModelType,
+  todolistId: string
+}
 
 type UserType = {
   id: number;
