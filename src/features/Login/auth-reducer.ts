@@ -21,7 +21,7 @@ const slice = createSlice({
 });
 
 // thunks
-export const authMeTC = ():AppThunk => async (dispatch) => {
+export const authMeTC = (): AppThunk => async (dispatch) => {
   dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
     const res = await authAPI.authMe();

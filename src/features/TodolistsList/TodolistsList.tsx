@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { AppRootStateType} from "app/store";
+import { AppRootStateType } from "app/store";
 import {
   addTodolistTC,
   changeTodolistTitleTC,
@@ -8,7 +8,7 @@ import {
   removeTodolistTC,
   TodolistDomainType, todolistsActions
 } from "./todolists-reducer";
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from "./tasks-reducer";
+import { removeTaskTC, TasksStateType, tasksThunks, updateTaskTC } from "./tasks-reducer";
 import { TaskStatuses } from "api/todolists-api";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -18,9 +18,9 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 export const TodolistsList: React.FC = () => {
-  const todolists = useSelector<AppRootStateType,Array<TodolistDomainType>>((state) => state.todolists);
-  const tasks = useSelector<AppRootStateType,TasksStateType>((state) => state.tasks);
-  const isLoggedIn = useSelector<AppRootStateType,boolean>((state) => state.auth.isLoggedIn);
+  const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>((state) => state.todolists);
+  const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks);
+  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
 
   const dispatch = useDispatch<any>();
 
@@ -36,8 +36,7 @@ export const TodolistsList: React.FC = () => {
   }, []);
 
   const addTask = useCallback(function(title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId);
-    dispatch(thunk);
+    dispatch(tasksThunks.addTask({ title, todolistId }));
   }, []);
 
   const changeStatus = useCallback(function(id: string, status: TaskStatuses, todolistId: string) {
@@ -51,7 +50,7 @@ export const TodolistsList: React.FC = () => {
   }, []);
 
   const changeFilter = useCallback(function(value: FilterValuesType, todolistId: string) {
-    const action = todolistsActions.setChangeTodolistFilter({ id:todolistId, filter:value });
+    const action = todolistsActions.setChangeTodolistFilter({ id: todolistId, filter: value });
     dispatch(action);
   }, []);
 
