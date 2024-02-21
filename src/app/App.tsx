@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { TodolistsList } from "features/TodolistsList/TodolistsList";
 import { AppRootStateType } from "./store";
-import { RequestStatusType } from "./app-reducer";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +13,7 @@ import { Menu } from "@mui/icons-material";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "features/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { authMeTC, logOutTC } from "features/Login/auth-reducer";
+import { authMeTC, authThunks } from "features/Login/auth-reducer";
 import { CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,7 +24,7 @@ function App() {
   const isLoggedIn = useSelector<AppRootStateType,boolean>((state) => state.auth.isLoggedIn);
 
   const logOut = () => {
-    dispatch(logOutTC());
+    dispatch(authThunks.logOut());
   };
 
   useEffect(() => {

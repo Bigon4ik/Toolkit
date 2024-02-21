@@ -8,10 +8,10 @@ import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useFormik } from "formik";
-import { loginTC } from "./auth-reducer";
 import { AppRootStateType } from "app/store";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { authThunks } from "features/Login/auth-reducer";
 
 export type LoginDataType = {
   email: string;
@@ -51,7 +51,7 @@ export const Login = () => {
     },
     onSubmit: async (values, _) => {
       _.setSubmitting(true);
-      await dispatch(loginTC(values));
+      await dispatch(authThunks.login(values));
       _.setSubmitting(false);
       // alert(JSON.stringify(values));
       formik.resetForm();

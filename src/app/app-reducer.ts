@@ -26,7 +26,7 @@ export const appActions = slice.actions;
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 
-export type InitialStateType = ReturnType<typeof slice.getInitialState>
+// export type InitialStateType = ReturnType<typeof slice.getInitialState>
 // export type InitialStateType = {
 //   isInitialized: boolean;
 //   // происходит ли сейчас взаимодействие с сервером
