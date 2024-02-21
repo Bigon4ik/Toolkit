@@ -13,7 +13,7 @@ import { Menu } from "@mui/icons-material";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "features/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { authMeTC, authThunks } from "features/Login/auth-reducer";
+import { authThunks } from "features/Login/auth-reducer";
 import { CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -28,7 +28,7 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch(authMeTC());
+    dispatch(authThunks.authMe());
   }, []);
 
   if (!isInitialized) {

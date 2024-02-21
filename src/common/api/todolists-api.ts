@@ -15,16 +15,16 @@ const instance = axios.create({
 export const authAPI = {
   login(data: any) {
     return instance.post<
-      ResponseType<{ userId: number }>,
-      AxiosResponse<ResponseType<{ userId: number }>>,
+      BaseResponseType<{ userId: number }>,
+      AxiosResponse<BaseResponseType<{ userId: number }>>,
       LoginDataType
     >("auth/login", data);
   },
   logOut() {
-    return instance.delete<ResponseType<UserType>>("auth/login");
+    return instance.delete<BaseResponseType<UserType>>("auth/login");
   },
   authMe() {
-    return instance.get<ResponseType<UserType>>("auth/me");
+    return instance.get<BaseResponseType<UserType>>("auth/me");
   },
 };
 export const todolistsAPI = {
@@ -33,8 +33,8 @@ export const todolistsAPI = {
   },
   createTodolist(title: string) {
     return instance.post<
-      ResponseType<{ item: TodolistType }>,
-      AxiosResponse<ResponseType<{ item: TodolistType }>>,
+      BaseResponseType<{ item: TodolistType }>,
+      AxiosResponse<BaseResponseType<{ item: TodolistType }>>,
       { title: string }
     >("todo-lists", { title });
   },
@@ -52,21 +52,33 @@ export const todolistsAPI = {
   },
   createTask(todolistId: string, title: string) {
     return instance.post<
-      ResponseType<{ item: TaskType }>,
-      AxiosResponse<ResponseType<{ item: TaskType }>>,
+      BaseResponseType<{ item: TaskType }>,
+      AxiosResponse<BaseResponseType<{ item: TaskType }>>,
       { title: string }
     >(`todo-lists/${todolistId}/tasks`, { title });
   },
   updateTask( taskId: string, model: UpdateTaskModelType,todolistId: string,) {
     return instance.put<
-      ResponseType<{ item: TaskType }>,
-      AxiosResponse<ResponseType<{ item: TaskType }>>,
+      BaseResponseType<{ item: TaskType }>,
+      AxiosResponse<BaseResponseType<{ item: TaskType }>>,
       UpdateTaskModelType
     >(`todo-lists/${todolistId}/tasks/${taskId}`, model);
   },
 };
 
 // types
+
+export type FieldErrorType = {
+  error:string;
+  field:string;
+}
+export type BaseResponseType<D = {}> = {
+  resultCode:number;
+  messages:string[];
+  data:D;
+  fieldsErrors:FieldErrorType[];
+}
+
 export type ArgUpdateTask = {
   taskId: string,
   domainModel: UpdateDomainTaskModelType,
@@ -89,12 +101,6 @@ export type TodolistType = {
   title: string;
   addedDate: string;
   order: number;
-};
-export type ResponseType<D = {}> = {
-  resultCode: number;
-  messages: Array<string>;
-  fieldsErrors: Array<string>;
-  data: D;
 };
 
 export enum TaskStatuses {
